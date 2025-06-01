@@ -1,143 +1,78 @@
 package com.poo.proyectobless;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.poo.proyectobless.conexion.ConexionDB;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText usuario, contraseña;
-    TextView lblregistrate;
-    Button btningresar;
-    Connection con;
-
-    public LoginActivity() {
-        ConexionDB instanceConecction = new ConexionDB();
-        con = instanceConecction.connect();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        usuario = (EditText) findViewById(R.id.txtusuario);
-        contraseña = (EditText) findViewById(R.id.txtcontraseña);
-        lblregistrate = (TextView) findViewById(R.id.lblregistrate);
-        btningresar = (Button) findViewById(R.id.btningresar);
-
-        btningresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new LoginActivity.login().execute("");
-            }
-        });
-
-        lblregistrate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registro = new Intent(getApplicationContext(), RegistroActivity.class);
-                startActivity(registro);
-
-            }
-        });
-
-
-    }
-
-    public class login extends AsyncTask<String, String, String> {
-        String z = null;
-        Boolean exito = false;
+    Button btn_iniciar_sesion;
+    EditText txtcorreo, txtcontraseña;;
+    TextView txtregistro;
+    FirebaseAuth auth;
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+            auth = FirebaseAuth.getInstance();
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
+            txtcorreo = findViewById(R.id.txtcorreo);
+            txtcontraseña = findViewById(R.id.txtcontraseña);
+            btn_iniciar_sesion = findViewById(R.id.btn_iniciar_sesion);
+            txtregistro = findViewById(R.id.txtregistro);
 
-        @Override
-        protected String doInBackground(String... strings) {
+            btn_iniciar_sesion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String correo = txtcorreo.getText().toString().trim();
+                    String contraseña = txtcontraseña.getText().toString().trim();
 
-            if (con == null) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LoginActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                    if (correo.isEmpty() && contraseña.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "Por favor, ingrese todos los campos", Toast.LENGTH_SHORT).show();
+                    } else {
+                        iniciarSesion(correo, contraseña);
                     }
-                });
-
-                z = "En conexión";
-            } else {
-                try {
-                    String sql = "SELECT * FROM usuarios WHERE usuario = '" + usuario.getText() + "' AND contraseña = '" + contraseña.getText() + "'";
-                    Statement stm = con.createStatement();
-                    ResultSet rs = stm.executeQuery(sql);
-
-                    if (rs.next()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
-                                Intent menu = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(menu);
-                            }
-                        });
-
-                        usuario.setText("");
-                        contraseña.setText("");
-                    }
-                    else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(LoginActivity.this, "Error en el usuario o contraseña", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        usuario.setText("");
-                        contraseña.setText("");
-
-                    }
-
-
-                } catch (Exception e) {
-                    exito = false;
-                    Log.e("Error de conexión: ", e.getMessage());
                 }
-            }
+            });
 
-
-            return z;
-        }
+            txtregistro.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(LoginActivity.this, RegistroActivity.class));
+                }
+            });
     }
 
+    private void iniciarSesion(String correo, String contraseña) {
+            auth.signInWithEmailAndPassword(correo, contraseña).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()){
+                        finish();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        Toast.makeText(LoginActivity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+                    }
 
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(LoginActivity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
 }

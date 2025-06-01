@@ -8,11 +8,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aqui va el main "
-        tools:layout_editor_absoluteX="173dp"
-        tools:layout_editor_absoluteY="180dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="AQUI IRA EL MAIN"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

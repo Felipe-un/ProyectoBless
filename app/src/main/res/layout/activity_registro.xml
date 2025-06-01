@@ -52,6 +52,20 @@
                 android:textColorHint="@color/cardview_dark_background" />
 
             <EditText
+                android:id="@+id/emailRegister"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_edittext"
+                android:drawableLeft="@drawable/outline_attach_email_24"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@color/cardview_dark_background" />
+
+            <EditText
                 android:id="@+id/contraseñaRegister"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -87,10 +101,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-1dp"
-        android:text="Make to move.built to vibe"
+        android:text="@string/make_to_move_built_to_vibe"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
 </LinearLayout>
