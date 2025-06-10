@@ -1,5 +1,6 @@
 package com.poo.proyectobless;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log; // Importar Log
@@ -17,35 +18,43 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.poo.proyectobless.databinding.ActivityRegistroBinding;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class RegistroActivity extends AppCompatActivity {
 
+    /*
     Button btnregistrarse;
     EditText usuarioRegister, emailRegister, contraseñaRegister;
+     */
+
+    private ActivityRegistroBinding binding;
     FirebaseFirestore db;
     FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro);
+        binding = ActivityRegistroBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        usuarioRegister = findViewById(R.id.usuarioRegister);
+        /*usuarioRegister = findViewById(R.id.usuarioRegister);
         emailRegister = findViewById(R.id.emailRegister);
         contraseñaRegister = findViewById(R.id.contraseñaRegister);
         btnregistrarse = findViewById(R.id.btnregistarse);
 
-        btnregistrarse.setOnClickListener(new View.OnClickListener() {
+         */
+        binding.btnregistarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usuario = usuarioRegister.getText().toString().trim();
-                String email = emailRegister.getText().toString().trim();
-                String contraseña = contraseñaRegister.getText().toString().trim();
+                String usuario = binding.usuarioRegister.getText().toString().trim();
+                String email = binding.emailRegister.getText().toString().trim();
+                String contraseña = binding.contraseARegister.getText().toString().trim();
 
                 if (usuario.isEmpty() || email.isEmpty() || contraseña.isEmpty()) { // Usar || (OR) aquí
                     Toast.makeText(RegistroActivity.this, "Por favor, ingrese todos los campos", Toast.LENGTH_SHORT).show();

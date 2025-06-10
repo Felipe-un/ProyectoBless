@@ -3,9 +3,9 @@ package com.poo.proyectobless;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+//import android.widget.Button;
+//import android.widget.EditText;
+//import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,29 +17,35 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.poo.proyectobless.databinding.ActivityLoginBinding;
+
 public class LoginActivity extends AppCompatActivity {
 
-    Button btn_iniciar_sesion;
-    EditText txtcorreo, txtcontraseña;;
-    TextView txtregistro;
+//    Button btn_iniciar_sesion;
+//   EditText txtcorreo, txtcontraseña;;
+//    TextView txtregistro;
+
+    private ActivityLoginBinding binding;
     FirebaseAuth auth;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_login);
+            binding = ActivityLoginBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
             auth = FirebaseAuth.getInstance();
 
-            txtcorreo = findViewById(R.id.txtcorreo);
-            txtcontraseña = findViewById(R.id.txtcontraseña);
-            btn_iniciar_sesion = findViewById(R.id.btn_iniciar_sesion);
-            txtregistro = findViewById(R.id.txtregistro);
+            //reemplazar por BINDING
+            //txtcorreo = findViewById(R.id.txtcorreo);
+            //txtcontraseña = findViewById(R.id.txtcontraseña);
+            //btn_iniciar_sesion = findViewById(R.id.btn_iniciar_sesion);
+            //txtregistro = findViewById(R.id.txtregistro);
 
-            btn_iniciar_sesion.setOnClickListener(new View.OnClickListener() {
+            binding.btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String correo = txtcorreo.getText().toString().trim();
-                    String contraseña = txtcontraseña.getText().toString().trim();
+                    String correo = binding.txtcorreo.getText().toString().trim();
+                    String contraseña = binding.txtcontraseA.getText().toString().trim();
 
                     if (correo.isEmpty() && contraseña.isEmpty()) {
                         Toast.makeText(LoginActivity.this, "Por favor, ingrese todos los campos", Toast.LENGTH_SHORT).show();
@@ -49,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            txtregistro.setOnClickListener(new View.OnClickListener() {
+            binding.txtregistro.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(LoginActivity.this, RegistroActivity.class));
